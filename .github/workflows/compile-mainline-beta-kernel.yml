@@ -203,7 +203,7 @@ jobs:
           removeArtifacts: false
           replacesArtifacts: true
           makeLatest: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASES_TOKEN }}
           body: |
             - These kernels can be used for `Armbian`, `OpenWrt` and `FnNAS`.
             - These are mainline `beta` kernels that may contain experimental features. Do not use unless you know what you are doing.
