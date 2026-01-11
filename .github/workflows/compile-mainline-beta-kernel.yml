@@ -13,15 +13,19 @@ on:
       kernel_source:
         description: "Select the kernel source"
         required: false
-        default: "unifreq"
+        default: "de-quenx"
         type: choice
         options:
           - unifreq
-          - ophub
+          - codesnas
+          - chanz-x
+          - de-quenx
+          - dirgha80
+          - houjie80
       kernel_version:
         description: "Select kernel version"
         required: false
-        default: "6.12.y"
+        default: "6.6.y_6.12.y"
         type: choice
         options:
           - 5.10.y
@@ -29,6 +33,8 @@ on:
           - 6.1.y
           - 6.6.y
           - 6.12.y
+          - 6.6.y_6.12.y
+          - 6.1.y_6.6.y_6.12.y
       kernel_auto:
         description: "Auto use the latest kernel"
         required: false
@@ -175,7 +181,8 @@ jobs:
             kernel-mainline-${{ inputs.kernel_toolchain }}-${{ inputs.kernel_version }}-
 
       - name: Compile the kernel [ ${{ inputs.kernel_version }} ]
-        uses: ophub/amlogic-s9xxx-armbian@main
+        ##uses: ophub/amlogic-s9xxx-armbian@main
+        uses: chanz-x/amlogic-s9xxx-armbian@main
         if: ${{ steps.disk.outputs.status }} == 'success' && !cancelled()
         with:
           build_target: kernel
