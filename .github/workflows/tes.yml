@@ -13,11 +13,12 @@ on:
       kernel_source:
         description: "Select the kernel source"
         required: false
-        default: "unifreq"
+        default: "chanz-x"
         type: choice
         options:
           - unifreq
           - codesnas
+          - chanz-x
           - dirgha80
           - houjie80
       kernel_version:
@@ -170,7 +171,7 @@ jobs:
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Compile the kernel [ ${{ inputs.kernel_version }} ]
-        uses: ribel13/linux-6.12.y@main
+        uses: chanz-x/amlogic-s9xxx-armbian@main
         if: ${{ steps.mapped.outputs.status }} == 'success' && !cancelled()
         with:
           build_target: kernel
