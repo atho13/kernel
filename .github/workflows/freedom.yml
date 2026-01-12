@@ -34,8 +34,8 @@ on:
           - 6.1.y
           - 6.6.y
           - 6.12.y
-          #- 5.4.y_5.10.y_5.15.y
-          - 6.1.y_6.6.y_6.12.y
+          - 5.15._6.1.y
+          - 6.6.y_6.12.y
           - all
       kernel_auto:
         description: "Auto use the latest kernel"
@@ -158,8 +158,8 @@ jobs:
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Compile the kernel [ ${{ inputs.kernel_version }} ]
-        ##uses: chanz-x/amlogic-s9xxx-armbian@main
-        uses: ribel13/amlogic-s9xxx-armbian@main
+        uses: chanz-x/amlogic-s9xxx-armbian@main
+        ##uses: ribel13/amlogic-s9xxx-armbian@main
         if: ${{ steps.mapped.outputs.status }} == 'success' && !cancelled()
         with:
           build_target: kernel
