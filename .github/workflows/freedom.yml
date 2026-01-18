@@ -23,6 +23,7 @@ on:
           - Houjie80
           - tes-rep
           - ribel13
+          - ribel13/linus-6.17.4
       kernel_version:
         description: "Select kernel version"
         required: false
@@ -164,8 +165,7 @@ jobs:
 
       - name: Compile the kernel [ ${{ inputs.kernel_version }} ]
         #uses: chanz-x/amlogic-s9xxx-armbian@main
-        #uses: ribel13/amlogic-s9xxx-armbian@main
-        uses: tes-rep/linuxx@amlogic-6.17.y
+        uses: ribel13/amlogic-s9xxx-armbian@main
         if: ${{ steps.mapped.outputs.status }} == 'success' && !cancelled()
         with:
           build_target: kernel
