@@ -92,7 +92,7 @@ on:
         type: choice
         options:
           - -ophub
-          - -freedom
+          - -frdmX
 
 env:
   TZ: Etc/UTC
