@@ -88,7 +88,7 @@ on:
       kernel_sign:
         description: "Set the kernel custom signature"
         required: false
-        default: "-freedom"
+        default: "-frdmX"
         type: choice
         options:
           - -ophub
@@ -165,7 +165,7 @@ jobs:
       - name: Compile the kernel [ ${{ inputs.kernel_version }} ]
         #uses: chanz-x/amlogic-s9xxx-armbian@main
         #uses: ribel13/amlogic-s9xxx-armbian@main
-        uses: ribel13/linus@amlogic-6.17.y
+        uses: tes-rep/linuxx@amlogic-6.17.y
         if: ${{ steps.mapped.outputs.status }} == 'success' && !cancelled()
         with:
           build_target: kernel
