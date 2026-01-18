@@ -21,13 +21,12 @@ on:
           - chanz-x
           - Dirgha80
           - Houjie80
-          - tes-rep
+          - tes-rep/linus-6.18.y
           - ribel13
-          - ribel13/linus-6.17.4
       kernel_version:
         description: "Select kernel version"
         required: false
-        default: "6.17.y"
+        default: "6.18.y"
         type: choice
         options:
           - 5.4.y
@@ -37,6 +36,7 @@ on:
           - 6.6.y
           - 6.12.y
           - 6.17.y
+          - 6.18.y
           - 5.4.y_5.10.y
           - 5.15.y_6.1.y
           - 6.6.y_6.12.y
