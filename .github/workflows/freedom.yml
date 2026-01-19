@@ -164,8 +164,7 @@ jobs:
 
       - name: Compile the kernel [ ${{ inputs.kernel_version }} ]
         #uses: chanz-x/amlogic-s9xxx-armbian@main
-        #uses: ribel13/amlogic-s9xxx-armbian@main
-        uses: ribel13/linus@amlogic-6.17.y
+        uses: ribel13/amlogic-s9xxx-armbian@main
         if: ${{ steps.mapped.outputs.status }} == 'success' && !cancelled()
         with:
           build_target: kernel
