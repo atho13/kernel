@@ -13,12 +13,11 @@ on:
       kernel_source:
         description: "Select the kernel source"
         required: false
-        default: "tes-rep"
+        default: "ribel13"
         type: choice
         options:
           - unifreq
           - codesnas
-          - chanz-x
           - Dirgha80
           - Houjie80
           - tes-rep
@@ -26,7 +25,7 @@ on:
       kernel_version:
         description: "Select kernel version"
         required: false
-        default: "6.17.y"
+        default: "6.6.y"
         type: choice
         options:
           - 5.4.y
@@ -35,8 +34,6 @@ on:
           - 6.1.y
           - 6.6.y
           - 6.12.y
-          - 6.17.y
-          - 6.19.y
           - 5.4.y_5.10.y
           - 5.15.y_6.1.y
           - 6.6.y_6.12.y
@@ -89,11 +86,11 @@ on:
       kernel_sign:
         description: "Set the kernel custom signature"
         required: false
-        default: "-frdmX"
+        default: "-FRDMx"
         type: choice
         options:
           - -ophub
-          - -frdmX
+          - -FRDMx
 
 env:
   TZ: Etc/UTC
@@ -164,7 +161,6 @@ jobs:
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Compile the kernel [ ${{ inputs.kernel_version }} ]
-        #uses: chanz-x/amlogic-s9xxx-armbian@main
         uses: ribel13/amlogic-s9xxx-armbian@main
         if: ${{ steps.mapped.outputs.status }} == 'success' && !cancelled()
         with:
@@ -191,5 +187,5 @@ jobs:
           token: ${{ secrets.RELEASES_TOKEN }}
           body: |
             The kernel can be used to compile Armbian and OpenWrt.
-            The kernel source code comes from: ${{ inputs.kernel_source }}
+            The kernel source code comes from: FRDM-X
             The kernel compilation toolchain: ${{ inputs.kernel_toolchain }}
