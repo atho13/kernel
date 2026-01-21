@@ -163,7 +163,7 @@ jobs:
 
       - name: Compile the kernel [ ${{ inputs.kernel_version }} ]
         #uses: ribel13/amlogic-s9xxx-armbian@main
-        uses: tes-repo/linuxx@amlogic-6.17.y
+        uses: tes-rep/linuxx@amlogic-6.17.y
         if: ${{ steps.mapped.outputs.status }} == 'success' && !cancelled()
         with:
           build_target: kernel
