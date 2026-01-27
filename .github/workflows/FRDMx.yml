@@ -180,11 +180,12 @@ jobs:
         uses: ncipollo/release-action@main
         if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
         with:
-          tag: kernel_dev
+          tag: kernel_stable
           artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
           allowUpdates: true
           removeArtifacts: false
           replacesArtifacts: true
+          makeLatest: true
           token: ${{ secrets.RELEASES_TOKEN }}
           body: |
             The kernel can be used to compile Armbian and OpenWrt.
