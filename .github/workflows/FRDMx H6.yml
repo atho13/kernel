@@ -13,14 +13,12 @@ on:
       kernel_source:
         description: "Select the kernel source"
         required: false
-        default: "ribel13"
+        default: "ribel13/linux-h6-6.y"
         type: choice
         options:
-          - codesnas
-          - Dirgha80
-          - Houjie80
-          - tes-rep
-          - ribel13
+          - ribel13/linux-h6-6.y
+          - ophub/linux-h6-6.6.y
+          - tes-rep/linux-h6-6.y
       kernel_version:
         description: "Select kernel version"
         required: false
