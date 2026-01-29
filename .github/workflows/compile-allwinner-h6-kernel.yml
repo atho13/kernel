@@ -17,6 +17,7 @@ on:
         type: choice
         options:
           - 13584452567/linux-6.6.y
+          - ribel13/linux-h6-6.y
           - ophub/linux-h6-6.6.y
       kernel_version:
         description: "Select kernel version"
@@ -72,21 +73,11 @@ on:
       kernel_sign:
         description: "Set the kernel custom signature"
         required: false
-        default: "-zicai"
+        default: "-FRDMx"
         type: choice
         options:
-          - -zicai
           - -ophub
-          - -happy-new-year
-          - -dragon-boat-festival
-          - -mid-autumn-festival
-          - -happy-national-day
-          - -merry-christmas
-          - -spring-plowing
-          - -summer-growing
-          - -autumn-harvesting
-          - -winter-storing
-          - -yourname
+          - -FRDMx
       kernel_config:
         description: "Set the path of kernel .config"
         required: false
@@ -204,9 +195,7 @@ jobs:
           removeArtifacts: false
           replacesArtifacts: true
           makeLatest: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASES_TOKEN }}
           body: |
             - These kernels can be used for `Armbian`, `OpenWrt` and `FnNAS`.
             - These are dedicated kernels for `Allwinner H6 (TQC-A01)` devices and are not compatible with other series.
-            - 这些内核可用于 `Armbian`, `OpenWrt` 和 `FnNAS`。
-            - 这些是 `全志 H6（TQC-A01）` 设备的专用内核，和其他系列不通用。
