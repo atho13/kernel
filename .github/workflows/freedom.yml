@@ -44,7 +44,7 @@ on:
       kernel_auto:
         description: "Auto use the latest kernel"
         required: false
-        default: false
+        default: true
         type: boolean
       silent_log:
         description: "Use silent logging"
