@@ -162,7 +162,8 @@ jobs:
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Compile the kernel [ ${{ inputs.kernel_version }} ]
-        uses: ribel13/amlogic-s9xxx-armbian@main
+        #uses: ribel13/amlogic-s9xxx-armbian@main
+        uses: ribel13/kernel@main
         if: ${{ steps.mapped.outputs.status }} == 'success' && !cancelled()
         with:
           build_target: kernel
