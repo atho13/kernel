@@ -22,6 +22,7 @@ on:
           - Houjie80
           - tes-rep
           - ribel13
+          - chanz-x
       kernel_version:
         description: "Select kernel version"
         required: false
@@ -157,12 +158,12 @@ jobs:
         run: |
           df -hT ${PWD}
           mkdir -p /builder/{kernel,output}
-          ln -sf /builder/kernel /home/runner/work/_actions/ribel13/amlogic-s9xxx-armbian/main/compile-kernel/kernel
-          ln -sf /builder/output /home/runner/work/_actions/ribel13/amlogic-s9xxx-armbian/main/compile-kernel/output
+          ln -sf /builder/kernel /home/runner/work/_actions/chanz-x/amlogic-s9xxx-armbian/main/compile-kernel/kernel
+          ln -sf /builder/output /home/runner/work/_actions/chanz-x/amlogic-s9xxx-armbian/main/compile-kernel/output
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Compile the kernel [ ${{ inputs.kernel_version }} ]
-        uses: ribel13/amlogic-s9xxx-armbian@main
+        uses: chanz-x/amlogic-s9xxx-armbian@main
         #uses: ribel13/kernel@main
         if: ${{ steps.mapped.outputs.status }} == 'success' && !cancelled()
         with:
