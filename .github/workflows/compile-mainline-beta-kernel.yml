@@ -13,13 +13,14 @@ on:
       kernel_source:
         description: "Select the kernel source"
         required: false
-        default: "de-quenx"
+        default: "ribel13"
         type: choice
         options:
           - unifreq
           - codesnas
           - chanz-x
           - de-quenx
+          - ribel13
           - dirgha80
           - houjie80
       kernel_version:
@@ -182,7 +183,7 @@ jobs:
 
       - name: Compile the kernel [ ${{ inputs.kernel_version }} ]
         ##uses: ophub/amlogic-s9xxx-armbian@main
-        uses: chanz-x/amlogic-s9xxx-armbian@main
+        uses: ribel13/amlogic-s9xxx-armbian@main
         if: ${{ steps.disk.outputs.status }} == 'success' && !cancelled()
         with:
           build_target: kernel
@@ -195,7 +196,7 @@ jobs:
           kernel_patch: ${{ inputs.kernel_patch }}
           auto_patch: ${{ inputs.auto_patch }}
           ccache_clear: ${{ inputs.ccache_clear }}
-          kernel_sign: -beta
+          kernel_sign: -FRDMx
           delete_source: true
           docker_hostpath: /builder
           docker_image: ophub/armbian-${{ inputs.docker_image }}:arm64
