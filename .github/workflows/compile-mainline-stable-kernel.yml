@@ -20,7 +20,7 @@ on:
           - codesnas
           - chanz-x
           - de-quenx
-          - dirgha80
+          - Dirgha80
           - ribel13
       kernel_version:
         description: "Select kernel version"
