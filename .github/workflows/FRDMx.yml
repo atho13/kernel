@@ -1,10 +1,10 @@
 #==========================================================================
-# Description: Compile mainline kernel on a server
+# Description: Compile mainline stable kernel
 # Copyright (C) 2021 https://github.com/unifreq/openwrt_packit
-# Copyright (C) 2021 https://github.com/ophub/amlogic-s9xxx-armbian
+# Copyright (C) 2021 https://github.com/ophub/kernel
 #==========================================================================
 
-name: FRDMx
+name: Compile mainline stable kernel
 
 on:
   repository_dispatch:
@@ -18,15 +18,14 @@ on:
         options:
           - unifreq
           - codesnas
-          - Dirgha80
-          - Houjie80
-          - tes-rep
-          - ribel13
           - chanz-x
+          - de-quenx
+          - Dirgha80
+          - ribel13
       kernel_version:
         description: "Select kernel version"
         required: false
-        default: "6.6.y"
+        default: "6.12.y"
         type: choice
         options:
           - 5.4.y
@@ -36,24 +35,13 @@ on:
           - 6.6.y
           - 6.12.y
           - 6.18.y
-          - 5.4.y_5.10.y
-          - 5.15.y_6.1.y
-          - 6.6.y_6.12.y
-          - 5.4.y_5.10.y_5.15.y
-          - 6.1.y_6.6.y_6.12.y
-          - all
       kernel_auto:
         description: "Auto use the latest kernel"
         required: false
         default: true
         type: boolean
-      silent_log:
-        description: "Use silent logging"
-        required: false
-        default: true
-        type: boolean
       delete_source:
-        description: "Delete the source after compilation"
+        description: "Delete source after compilation"
         required: false
         default: true
         type: boolean
@@ -73,18 +61,23 @@ on:
         options:
           - clang
           - gcc
-          - gcc-14.2
+          - gcc-15.2
           - gcc-14.3
-      compress_format:
-        description: "Set the initrd compression format"
+          - gcc-14.2
+      ccache_clear:
+        description: "Set whether to clear the cache"
         required: false
-        default: "xz"
+        default: false
+        type: boolean
+      docker_image:
+        description: "Select Armbian docker image"
+        required: false
+        default: "trixie"
         type: choice
         options:
-          - xz
-          - gzip
-          - zstd
-          - lzma
+          - trixie
+          - noble
+          - jammy
       kernel_sign:
         description: "Set the kernel custom signature"
         required: false
@@ -101,6 +94,7 @@ on:
         options:
           - kernel-config/release/stable
           - false
+
 env:
   TZ: Etc/UTC
 
@@ -159,30 +153,46 @@ jobs:
           df -Th
           echo "status=success" >> ${GITHUB_OUTPUT}
 
-      - name: Create a mapped directory
-        id: mapped
-        working-directory: /builder
+      - name: Get kernel source hash
+        id: kernelhash
         run: |
-          df -hT ${PWD}
-          mkdir -p /builder/{kernel,output}
-          ln -sf /builder/kernel /home/runner/work/_actions/ribel13/amlogic-s9xxx-armbian/main/compile-kernel/kernel
-          ln -sf /builder/output /home/runner/work/_actions/ribel13/amlogic-s9xxx-armbian/main/compile-kernel/output
+          # Get the latest source hash from the kernel repository
+          api_url="https://api.github.com/repos/${{ inputs.kernel_source }}/linux-${{ inputs.kernel_version }}/git/ref/heads/main"
+          source_hash=$(curl -fsSL -m 20 \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer ${{ secrets.RELEASES_TOKEN }}" \
+              ${api_url} |
+              jq -r '.object.sha'
+          )
+          [[ -z "${source_hash}" || "${source_hash}" == "null" ]] && source_hash="${{ github.sha }}"
+          echo "source_hash=${source_hash}" >> ${GITHUB_ENV}
           echo "status=success" >> ${GITHUB_OUTPUT}
 
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: /builder/ccache
+          key: kernel-mainline-${{ inputs.kernel_toolchain }}-${{ inputs.kernel_version }}-${{ env.source_hash }}
+          restore-keys: |
+            kernel-mainline-${{ inputs.kernel_toolchain }}-${{ inputs.kernel_version }}-
+
       - name: Compile the kernel [ ${{ inputs.kernel_version }} ]
+        #uses: ophub/amlogic-s9xxx-armbian@main
         uses: ribel13/amlogic-s9xxx-armbian@main
-        if: ${{ steps.mapped.outputs.status }} == 'success' && !cancelled()
+        if: ${{ steps.disk.outputs.status }} == 'success' && !cancelled()
         with:
           build_target: kernel
-          kern4el_source: ${{ inputs.kernel_source }}
+          kernel_source: ${{ inputs.kernel_source }}
           kernel_version: ${{ inputs.kernel_version }}
           kernel_auto: ${{ inputs.kernel_auto }}
           delete_source: ${{ inputs.delete_source }}
           kernel_package: ${{ inputs.kernel_package }}
-          kernel_sign: ${{ inputs.kernel_sign }}
           kernel_toolchain: ${{ inputs.kernel_toolchain }}
-          compress_format: ${{ inputs.compress_format }}
-          silent_log: ${{ inputs.silent_log }}
+          kernel_sign: ${{ inputs.kernel_sign }}
+          kernel_config: ${{ inputs.kernel_config }}
+          ccache_clear: ${{ inputs.ccache_clear }}
+          docker_hostpath: /builder
+          docker_image: ophub/armbian-${{ inputs.docker_image }}:arm64
 
       - name: Upload Kernel to Release
         uses: ncipollo/release-action@main
@@ -196,6 +206,5 @@ jobs:
           makeLatest: true
           token: ${{ secrets.RELEASES_TOKEN }}
           body: |
-            The kernel can be used to compile Armbian and OpenWrt.
-            The kernel source code comes from: ${{ inputs.kernel_source }}
-            The kernel compilation toolchain: ${{ inputs.kernel_toolchain }}
+            - These are Mainline `stable` kernels that provide support for `Armbian`, `OpenWrt` and `FnNAS`.
+            - It works with most `Amlogic`, `Rockchip`, and `Allwinner` devices. For specific details, please refer to the instructions on the homepage of each system's repository.
