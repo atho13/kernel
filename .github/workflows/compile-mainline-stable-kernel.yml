@@ -13,13 +13,13 @@ on:
       kernel_source:
         description: "Select the kernel source"
         required: false
-        default: "ribel13"
+        default: "atho13"
         type: choice
         options:
           - unifreq
           - codesnas
           - chanz-x
-          - de-quenx
+          - atho13
           - Dirgha80
           - ribel13
       kernel_version:
