@@ -13,15 +13,12 @@ on:
       kernel_source:
         description: "Select the kernel source"
         required: false
-        default: "ribel13"
+        default: "atho13"
         type: choice
         options:
           - unifreq
           - codesnas
-          - chanz-x
-          - de-quenx
-          - Dirgha80
-          - ribel13
+          - atho13
       kernel_version:
         description: "Select kernel version"
         required: false
@@ -34,10 +31,7 @@ on:
           - 6.1.y
           - 6.6.y
           - 6.12.y
-          - 6.14.y
-          - 6.17.y
           - 6.18.y
-          - 6.19.y
           - 6.6.y_6.12.y_6.18.y
       kernel_auto:
         description: "Auto use the latest kernel"
@@ -181,7 +175,7 @@ jobs:
             kernel-mainline-${{ inputs.kernel_toolchain }}-${{ inputs.kernel_version }}-
 
       - name: Compile the kernel [ ${{ inputs.kernel_version }} ]
-        uses: ophub/amlogic-s9xxx-armbian@main
+        uses: atho13/amlogic-s9xxx-armbian@main
         # uses: ribel13/amlogic-s9xxx-armbian@main
         if: ${{ steps.disk.outputs.status }} == 'success' && !cancelled()
         with:
