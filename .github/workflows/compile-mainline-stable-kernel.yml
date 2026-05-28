@@ -59,6 +59,14 @@ on:
         options:
           - kernel-patch/beta
           - false
+      auto_patch:
+        description: "Set whether to use kernel patches"
+        required: false
+        default: "true"
+        type: choice
+        options:
+          - true
+          - false
       kernel_toolchain:
         description: "Select the compilation toolchain"
         required: false
