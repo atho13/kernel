@@ -17,7 +17,6 @@ on:
         type: choice
         options:
           - unifreq
-          - codesnas
           - atho13
       kernel_version:
         description: "Select kernel version"
@@ -37,6 +36,30 @@ on:
         required: false
         default: true
         type: boolean
+      kernel_config:
+        description: "Set the path of kernel .config"
+        required: false
+        default: "kernel-config/release/stable"
+        type: choice
+        options:
+          - kernel-config/release/stable
+          - false
+      kernel_patch:
+        description: "Set the directory for kernel patches"
+        required: false
+        default: "kernel-patch/beta"
+        type: choice
+        options:
+          - kernel-patch/beta
+          - false
+      auto_patch:
+        description: "Set whether to use kernel patches"
+        required: false
+        default: "true"
+        type: choice
+        options:
+          - true
+          - false 
       kernel_package:
         description: "Select compile package list"
         required: false
@@ -45,14 +68,6 @@ on:
         options:
           - all
           - dtbs
-      auto_patch:
-        description: "Set whether to use kernel patches"
-        required: false
-        default: "true"
-        type: choice
-        options:
-          - true
-          - false
       kernel_toolchain:
         description: "Select the compilation toolchain"
         required: false
@@ -83,15 +98,6 @@ on:
         options:
           - -ophub
           - -FRDMX
-      kernel_config:
-        description: "Set the path of kernel .config"
-        required: false
-        default: "custom"
-        type: choice
-        options:
-          - custom
-          - kernel-config/release/stable
-          - false
 
 env:
   TZ: Etc/UTC
