@@ -4,7 +4,7 @@
 # Copyright (C) 2021 https://github.com/ophub/kernel
 #==========================================================================
 
-name: FRDMX Compile
+name: Frdmx 6.18 - 6.19
 
 on:
   repository_dispatch:
@@ -13,30 +13,20 @@ on:
       kernel_source:
         description: "Select the kernel source"
         required: false
-        default: "ribel13"
+        default: "atho13"
         type: choice
         options:
           - unifreq
           - codesnas
-          - chanz-x
-          - de-quenx
-          - Dirgha80
-          - ribel13
+          - atho13
       kernel_version:
         description: "Select kernel version"
         required: false
-        default: "6.12.y"
+        default: "6.18.y"
         type: choice
         options:
-          - 5.4.y
-          - 5.10.y
-          - 5.15.y
-          - 6.1.y
-          - 6.6.y
-          - 6.12.y
           - 6.18.y
           - 6.19.y
-          - 6.6.y_6.12.y_6.18.y
       kernel_auto:
         description: "Auto use the latest kernel"
         required: false
@@ -55,6 +45,14 @@ on:
         options:
           - all
           - dtbs
+      auto_patch:
+        description: "Set whether to use kernel patches"
+        required: false
+        default: "true"
+        type: choice
+        options:
+          - true
+          - false
       kernel_toolchain:
         description: "Select the compilation toolchain"
         required: false
@@ -63,9 +61,6 @@ on:
         options:
           - clang
           - gcc
-          - gcc-15.2
-          - gcc-14.3
-          - gcc-14.2
       ccache_clear:
         description: "Set whether to clear the cache"
         required: false
@@ -91,9 +86,10 @@ on:
       kernel_config:
         description: "Set the path of kernel .config"
         required: false
-        default: "kernel-config/release/stable"
+        default: "custom"
         type: choice
         options:
+          - custom
           - kernel-config/release/stable
           - false
 
@@ -103,7 +99,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-24.04-arm
-    if: ${{ github.event.repository.owner.id }} == ${{ github.event.sender.id }}
+    if: ${{ github.event.repository.owner.id == github.event.sender.id }}
 
     steps:
       - name: Checkout
@@ -123,7 +119,6 @@ jobs:
           sudo -E apt-get -y purge azure-cli ghc* zulu* llvm* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
           sudo -E apt-get -y install $(curl -fsSL https://ophub.org/ubuntu2404-build-armbian-depends)
           sudo -E systemctl daemon-reload
-          #sudo -E apt-get -y full-upgrade
           sudo -E apt-get -y autoremove --purge
           sudo -E apt-get clean
           sudo sed -i '/NVM_DIR/d;/skel/d' /root/{.bashrc,.profile}
@@ -155,20 +150,31 @@ jobs:
           df -Th
           echo "status=success" >> ${GITHUB_OUTPUT}
 
-      - name: Create a mapped directory
-        id: mapped
-        working-directory: /builder
+      - name: Get kernel source hash
+        id: kernelhash
         run: |
-          df -hT ${PWD}
-          mkdir -p /builder/{kernel,output}
-          ln -sf /builder/kernel /home/runner/work/_actions/ophub/amlogic-s9xxx-armbian/main/compile-kernel/kernel
-          ln -sf /builder/output /home/runner/work/_actions/ophub/amlogic-s9xxx-armbian/main/compile-kernel/output
-          echo "status=success" >> ${GITHUB_OUTPUT
+          api_url="https://api.github.com/repos/${{ inputs.kernel_source }}/linux-${{ inputs.kernel_version }}/git/ref/heads/main"
+          source_hash=$(curl -fsSL -m 20 \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer ${{ secrets.RELEASES_TOKEN }}" \
+              ${api_url} |
+              jq -r '.object.sha'
+          )
+          [[ -z "${source_hash}" || "${source_hash}" == "null" ]] && source_hash="${{ github.sha }}"
+          echo "source_hash=${source_hash}" >> ${GITHUB_ENV}
+          echo "status=success" >> ${GITHUB_OUTPUT}
+
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: /builder/ccache
+          key: kernel-mainline-${{ inputs.kernel_toolchain }}-${{ inputs.kernel_version }}-${{ env.source_hash }}
+          restore-keys: |
+            kernel-mainline-${{ inputs.kernel_toolchain }}-${{ inputs.kernel_version }}-
 
       - name: Compile the kernel [ ${{ inputs.kernel_version }} ]
         uses: ophub/amlogic-s9xxx-armbian@main
-        # uses: ribel13/amlogic-s9xxx-armbian@main
-        if: ${{ steps.disk.outputs.status }} == 'success' && !cancelled()
+        if: ${{ steps.disk.outputs.status == 'success' && !cancelled() }}
         with:
           build_target: kernel
           kernel_source: ${{ inputs.kernel_source }}
@@ -180,15 +186,16 @@ jobs:
           kernel_sign: ${{ inputs.kernel_sign }}
           kernel_config: ${{ inputs.kernel_config }}
           ccache_clear: ${{ inputs.ccache_clear }}
+          auto_patch: ${{ inputs.auto_patch }}
           docker_hostpath: /builder
           docker_image: ophub/armbian-${{ inputs.docker_image }}:arm64
 
       - name: Upload Kernel to Release
         uses: ncipollo/release-action@main
-        if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
+        if: ${{ env.PACKAGED_STATUS == 'success' && !cancelled() }}
         with:
           tag: kernel_stable
-          artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
+          artifacts: "${{ env.PACKAGED_OUTPUTPATH }}/*"
           allowUpdates: true
           removeArtifacts: false
           replacesArtifacts: true
