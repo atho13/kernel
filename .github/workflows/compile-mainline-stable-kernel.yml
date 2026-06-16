@@ -178,6 +178,16 @@ jobs:
           restore-keys: |
             kernel-mainline-${{ inputs.kernel_toolchain }}-${{ inputs.kernel_version }}-
 
+      - name: Pra-Inisialisasi Sinkronisasi Config
+        run: |
+          CONFIG_PATH="${{ inputs.kernel_config }}"
+          if [ -f "$CONFIG_PATH" ]; then
+             echo "==> Menyisipkan instruksi auto-sync ke file konfigurasi..."
+             echo "CONFIG_OLDDEFCONFIG=y" >> "$CONFIG_PATH"
+          else
+             echo "==> PERINGATAN: File konfigurasi tidak ditemukan di $CONFIG_PATH"
+          fi
+
       - name: Compile the kernel [ ${{ inputs.kernel_version }} ]
         uses: ophub/amlogic-s9xxx-armbian@main
         if: ${{ steps.disk.outputs.status }} == 'success' && !cancelled()
