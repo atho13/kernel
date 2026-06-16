@@ -17,7 +17,6 @@ on:
         type: choice
         options:
           - unifreq
-          - codesnas
           - atho13
       kernel_version:
         description: "Select kernel version"
@@ -31,8 +30,6 @@ on:
           - 6.1.y
           - 6.6.y
           - 6.12.y
-          - 6.18.y
-          - 6.6.y_6.12.y_6.18.y
       kernel_auto:
         description: "Auto use the latest kernel"
         required: false
@@ -78,12 +75,11 @@ on:
       docker_image:
         description: "Select Armbian docker image"
         required: false
-        default: "trixie"
+        default: "noble"
         type: choice
         options:
-          - trixie
+          - resolute
           - noble
-          - jammy
       kernel_sign:
         description: "Set the kernel custom signature"
         required: false
@@ -184,7 +180,6 @@ jobs:
 
       - name: Compile the kernel [ ${{ inputs.kernel_version }} ]
         uses: ophub/amlogic-s9xxx-armbian@main
-        # uses: ribel13/amlogic-s9xxx-armbian@main
         if: ${{ steps.disk.outputs.status }} == 'success' && !cancelled()
         with:
           build_target: kernel
