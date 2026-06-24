@@ -197,11 +197,9 @@ jobs:
            if [ -f "$TARGET_CONFIG" ]; then
               echo "==> Sinkronisasi internal: Memastikan opsi kustom FRDMX masuk sistem..."
                
-              # 1. Bersihkan entri lama agar tidak tumpang tindih
               sed -i '/CONFIG_SOUND/d;/CONFIG_SND/d;/CONFIG_MEDIA/d;/CONFIG_VIDEO_DEV/d;/CONFIG_DRM/d' "$TARGET_CONFIG"
               sed -i '/CONFIG_AUDIT/d;/CONFIG_AUDITSYSCALL/d;/CONFIG_IO_URING_ZCRX/d' "$TARGET_CONFIG"
                
-              # 2. Masukkan format penonaktifan yang benar (# CONFIG_... is not set)
               echo "" >> "$TARGET_CONFIG"
               echo "# Opsi Audit dan ZCRX dinonaktifkan oleh FRDMX" >> "$TARGET_CONFIG"
               echo "# CONFIG_AUDIT is not set" >> "$TARGET_CONFIG"
