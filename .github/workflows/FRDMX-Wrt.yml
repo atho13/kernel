@@ -1,10 +1,8 @@
 #==========================================================================
-# Description: Compile mainline stable kernel
-# Copyright (C) 2021 https://github.com/unifreq/openwrt_packit
-# Copyright (C) 2021 https://github.com/ophub/kernel
+# Description: Frdmx compile mainline stable kernel
 #==========================================================================
 
-name: Frdmx stable kernel
+name: Frdmx-Wrt stable kernel
 
 on:
   repository_dispatch:
@@ -192,14 +190,24 @@ jobs:
           restore-keys: |
             kernel-mainline-${{ inputs.kernel_toolchain }}-${{ matrix.kernel_version }}-
 
-      - name: Pra-Inisialisasi Sinkronisasi Config
+      - name: FRDMX WRT MOD
         run: |
-          CONFIG_PATH="${{ inputs.kernel_config }}"
-          if [ -f "$CONFIG_PATH" ]; then
-             echo "==> Menyisipkan instruksi auto-sync ke file konfigurasi..."
-             echo "CONFIG_OLDDEFCONFIG=y" >> "$CONFIG_PATH"
+          TARGET_CONFIG="kernel-config/release/stable"
+          
+          if [ -f "$TARGET_CONFIG" ]; then
+             echo "==> Sinkronisasi internal: Memastikan opsi kustom FRDMX masuk sistem..."
+             
+             sed -i '/CONFIG_SOUND/d;/CONFIG_SND/d;/CONFIG_MEDIA/d;/CONFIG_VIDEO_DEV/d;/CONFIG_DRM/d' "$TARGET_CONFIG"
+             sed -i '/CONFIG_AUDIT/d;/CONFIG_AUDITSYSCALL/d' "$TARGET_CONFIG"
+             
+             echo "" >> "$TARGET_CONFIG"
+             echo "# Opsi Audit dinonaktifkan oleh FRDMX" >> "$TARGET_CONFIG"
+             echo "CONFIG_AUDIT=n" >> "$TARGET_CONFIG"
+             echo "CONFIG_AUDITSYSCALL=n" >> "$TARGET_CONFIG"
+             
+             echo "==> Sinkronisasi FRDMX selesai dengan sukses!"
           else
-             echo "==> PERINGATAN: File konfigurasi tidak ditemukan di $CONFIG_PATH"
+             echo "==> PERINGATAN: File target $TARGET_CONFIG tidak ditemukan!"
           fi
 
       - name: Compile the kernel [ ${{ matrix.kernel_version }} ]
