@@ -207,7 +207,6 @@ jobs:
               echo "# Opsi Audit dan ZCRX dinonaktifkan oleh FRDMX" >> "$TARGET_CONFIG"
               echo "# CONFIG_AUDIT is not set" >> "$TARGET_CONFIG"
               echo "# CONFIG_AUDITSYSCALL is not set" >> "$TARGET_CONFIG"
-              echo "# CONFIG_IO_URING_ZCRX is not set" >> "$TARGET_CONFIG"
                
               echo "==> Sinkronisasi FRDMX selesai dengan sukses!"
             else
