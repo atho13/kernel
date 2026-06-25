@@ -1,21 +1,3 @@
-Skip to content
-atho13
-kernel
-Repository navigation
-Code
-Pull requests
-Actions
-Projects
-Wiki
-Security and quality
-Insights
-Settings
-Frdmx-Wrt stable kernel
-.github/workflows/FRDMX-Wrt.yml #6
-All jobs
-Run details
-Workflow file for this run
-.github/workflows/FRDMX-Wrt.yml at 1ee15a6
 #==========================================================================
 # Description: Frdmx compile mainline stable kernel
 #==========================================================================
@@ -213,7 +195,13 @@ jobs:
                
               sed -i '/CONFIG_SOUND/d;/CONFIG_SND/d;/CONFIG_MEDIA/d;/CONFIG_VIDEO_DEV/d;/CONFIG_DRM/d' "$TARGET_CONFIG"
               sed -i '/CONFIG_AUDIT/d;/CONFIG_AUDITSYSCALL/d;/CONFIG_IO_URING_ZCRX/d' "$TARGET_CONFIG"
-			  
+               
+              echo "" >> "$TARGET_CONFIG"
+              echo "# Opsi Audit dan ZCRX dinonaktifkan oleh FRDMX" >> "$TARGET_CONFIG"
+              echo "# CONFIG_AUDIT is not set" >> "$TARGET_CONFIG"
+              echo "# CONFIG_AUDITSYSCALL is not set" >> "$TARGET_CONFIG"
+              echo "# CONFIG_IO_URING_ZCRX is not set" >> "$TARGET_CONFIG"
+               
               echo "==> Sinkronisasi FRDMX selesai dengan sukses!"
             else
               echo "==> PERINGATAN: File target $TARGET_CONFIG tidak ditemukan!"
