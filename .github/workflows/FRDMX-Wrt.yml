@@ -1,3 +1,21 @@
+Skip to content
+atho13
+kernel
+Repository navigation
+Code
+Pull requests
+Actions
+Projects
+Wiki
+Security and quality
+Insights
+Settings
+Frdmx-Wrt stable kernel
+.github/workflows/FRDMX-Wrt.yml #6
+All jobs
+Run details
+Workflow file for this run
+.github/workflows/FRDMX-Wrt.yml at 1ee15a6
 #==========================================================================
 # Description: Frdmx compile mainline stable kernel
 #==========================================================================
@@ -107,7 +125,6 @@ jobs:
             MATRIX='{"include":[{"kernel_version":"${{ inputs.kernel_version }}"}]}'
           fi
           echo "matrix=${MATRIX}" >> "${GITHUB_OUTPUT}"
-
   build:
     needs: setup
     runs-on: ubuntu-24.04-arm
@@ -150,7 +167,6 @@ jobs:
           date -u
           timedatectl status || true
           echo "status=success" >> ${GITHUB_OUTPUT}
-
       - name: Create virtual disk for extended storage
         id: disk
         run: |
@@ -158,18 +174,15 @@ jobs:
           root_avail=$(df --block-size=1G / | tail -1 | awk '{print $4}')
           root_size=$(( root_avail - 4 ))
           [[ "${root_size}" -gt 0 ]] || { echo "Error: Insufficient space on /: ${root_avail}G available"; exit 1; }
-
           sudo truncate -s "${root_size}"G /root.img
           build_dev=$(sudo losetup --find --show /root.img)
           echo "Using /: ${root_size}G"
-
           sudo mkfs.xfs -f -i sparse=0 -b size=4096 "${build_dev}"
           sudo mkdir -p /builder
           sudo mount "${build_dev}" /builder
           sudo chown -R runner:runner /builder
           df -Th
           echo "status=success" >> ${GITHUB_OUTPUT}
-
       - name: Get kernel source commit hash
         id: kernelhash
         run: |
@@ -184,7 +197,6 @@ jobs:
           [[ -z "${source_hash}" || "${source_hash}" == "null" ]] && source_hash="${{ github.sha }}"
           echo "source_hash=${source_hash}" >> ${GITHUB_ENV}
           echo "status=success" >> ${GITHUB_OUTPUT}
-
       - name: Cache ccache
         uses: actions/cache@v5
         with:
@@ -192,79 +204,20 @@ jobs:
           key: kernel-mainline-${{ inputs.kernel_toolchain }}-${{ matrix.kernel_version }}-${{ env.source_hash }}
           restore-keys: |
             kernel-mainline-${{ inputs.kernel_toolchain }}-${{ matrix.kernel_version }}-
-
       - name: FRDMX WRT MOD
         run: |
           TARGET_CONFIG="kernel-config/release/stable"
             
-          if [ -f "$TARGET_CONFIG" ]; then
-             echo "==> Sinkronisasi internal: Memastikan opsi kustom FRDMX masuk sistem..."
-             
-             sed -i '/CONFIG_SOUND/d;/CONFIG_SND/d;/CONFIG_MEDIA/d;/CONFIG_VIDEO_DEV/d;/CONFIG_DRM/d' "$TARGET_CONFIG"
-             sed -i '/CONFIG_AUDIT/d;/CONFIG_AUDITSYSCALL/d;/CONFIG_IO_URING_ZCRX/d' "$TARGET_CONFIG"
-             
-             cat <<EOT >> "$TARGET_CONFIG"
-             # ======== FRDMX WRT MOD (KERNEL SIDE) =========
-             # PERTAHANAN SYSTEM HEALTH & WATCHDOG
-             CONFIG_WATCHDOG=y
-             CONFIG_WATCHDOG_CORE=y
-             CONFIG_MESON_WATCHDOG=y
-             CONFIG_WATCHDOG_NOWAYOUT=y
-             CONFIG_PANIC_ON_OOPS=y
-             CONFIG_PANIC_TIMEOUT=5
-             # TRACKING JARINGAN KERNEL
-             CONFIG_NF_CONNTRACK=y
-             CONFIG_NETFILTER_NETLINK=y
-             CONFIG_NETFILTER_XT_MATCH_CONNTRACK=y
-             CONFIG_NETFILTER_XT_MATCH_STATE=y
-             # PENGUNCI DRIVER MODEM USB
-             CONFIG_USB_SERIAL=y
-             CONFIG_USB_SERIAL_WWAN=y
-             CONFIG_USB_SERIAL_OPTION=y
-             CONFIG_USB_NET_DRIVERS=y
-             CONFIG_USB_USBNET=y
-             CONFIG_USB_NET_CDCETHER=y
-             CONFIG_USB_NET_CDC_NCM=y
-             CONFIG_USB_NET_HUAWEI_CDC_NCM=y
-	     CONFIG_USB_NET_CDC_MBIM=y
-	     CONFIG_USB_NET_RNDIS_HOST=y
-	     CONFIG_USB_NET_QMI_WWAN=y
-	     # AKTIVASI USB 3.0
-	     CONFIG_ARCH_MESON=y
-	     CONFIG_COMMON_CLK_G12A=y
-	     CONFIG_RESET_CONTROLLER=y
-	     CONFIG_RESET_MESON=y
-	     CONFIG_USB_DWC3=y
-	     CONFIG_USB_DWC3_DUAL_ROLE=y
-	     CONFIG_USB_DWC3_GENERIC_PLAT=y
-	     # OPTIMALISASI KONEKSI JARINGAN
-	     CONFIG_TCP_CONG_ADVANCED=y
-	     CONFIG_TCP_CONG_BBR=y
-	     CONFIG_DEFAULT_TCP_CONG="bbr"
-	     # PENGHEMATAN CPU & RAM
-	     # CONFIG_SOUND is not set
-	     # CONFIG_SND is not set
-	     # CONFIG_SND_SOC is not set
-	     # CONFIG_SND_MESON_AXG_FIFO is not set
-	     # CONFIG_SND_MESON_AXG_FRDDR is not set
-	     # CONFIG_SND_MESON_AXG_TODDR is not set
-	     # CONFIG_MEDIA_SUPPORT is not set
-	     # CONFIG_MEDIA_CAMERA_SUPPORT is not set
-	     # CONFIG_MEDIA_ANALOG_TV_SUPPORT is not set
-	     # CONFIG_MEDIA_DIGITAL_TV_SUPPORT is not set
-	     # CONFIG_VIDEO_DEV is not set
-	     # CONFIG_DRM is not set
-	     # CONFIG_DRM_MESON is not set
-	     # INTEGRASI INFRASTRUKTUR PROXY
-	     CONFIG_NETFILTER_XT_TARGET_TPROXY=y
-	     CONFIG_NETFILTER_XT_MATCH_SOCKET=y
-	     EOT
-             
-             echo "==> Sinkronisasi FRDMX selesai dengan sukses!"
-          else
-             echo "==> PERINGATAN: File target $TARGET_CONFIG tidak ditemukan!"
-          fi
-
+           if [ -f "$TARGET_CONFIG" ]; then
+              echo "==> Sinkronisasi internal: Memastikan opsi kustom FRDMX masuk sistem..."
+               
+              sed -i '/CONFIG_SOUND/d;/CONFIG_SND/d;/CONFIG_MEDIA/d;/CONFIG_VIDEO_DEV/d;/CONFIG_DRM/d' "$TARGET_CONFIG"
+              sed -i '/CONFIG_AUDIT/d;/CONFIG_AUDITSYSCALL/d;/CONFIG_IO_URING_ZCRX/d' "$TARGET_CONFIG"
+			  
+              echo "==> Sinkronisasi FRDMX selesai dengan sukses!"
+            else
+              echo "==> PERINGATAN: File target $TARGET_CONFIG tidak ditemukan!"
+            fi
       - name: Compile the kernel [ ${{ matrix.kernel_version }} ]
         uses: ophub/amlogic-s9xxx-armbian@main
         if: ${{ steps.disk.outputs.status == 'success' && !cancelled() }}
@@ -281,7 +234,6 @@ jobs:
           ccache_clear: ${{ inputs.ccache_clear }}
           docker_hostpath: /builder
           docker_image: ophub/armbian-${{ inputs.docker_image }}:arm64
-
 
       - name: Upload Kernel to Release
         uses: ophub/upload-to-releases@main
