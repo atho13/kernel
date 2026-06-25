@@ -2,7 +2,7 @@
 # Description: Frdmx compile mainline stable kernel
 #==========================================================================
 
-name: Frdmx-Wrt stable kernel
+name: Frdmx-WrtX
 
 on:
   repository_dispatch:
