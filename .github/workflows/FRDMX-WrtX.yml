@@ -240,7 +240,12 @@ jobs:
           CONFIG_NETFILTER_XT_TARGET_TPROXY=y
           CONFIG_NETFILTER_XT_MATCH_SOCKET=y
           EOT
+
+          # Verifikasi otomatis: Hapus spasi kosong di awal baris jika ada tab yang tersisa
+          sed -i 's/^[ \t]*//' "$TARGET_CONFIG"
+          
           echo "==> Berhasil membuat berkas config kustom FRDMX!"
+          cat "$TARGET_CONFIG" # Menampilkan isi file di log untuk memastikan tidak ada spasi depan
           ls -la kernel-config/release/
 
       - name: Compile the kernel [ ${{ matrix.kernel_version }} ]
