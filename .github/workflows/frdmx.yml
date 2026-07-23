@@ -17,7 +17,7 @@ on:
           - unifreq
           - ophub
           - atho13
-          - tes-rep/linuxx
+          - atho13/linus
       kernel_version:
         description: "Select kernel version"
         required: false
