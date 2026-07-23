@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm64 6.14.7 Kernel Configuration
+# Linux/arm64 6.14.y Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="aarch64-none-linux-gnu-gcc (Arm GNU Toolchain 14.3.Rel1 (Build arm-14.174)) 14.3.1 20250623"
 CONFIG_CC_IS_GCC=y
@@ -3309,6 +3309,7 @@ CONFIG_RT2X00_LIB_LEDS=y
 # CONFIG_RT2X00_DEBUG is not set
 CONFIG_WLAN_VENDOR_REALTEK=y
 CONFIG_RTL8189FS=m
+CONFIG_RTL8822CS=m
 CONFIG_RTL8180=m
 CONFIG_RTL8187=m
 CONFIG_RTL8187_LEDS=y
@@ -10113,6 +10114,10 @@ CONFIG_MEMTEST=y
 
 #
 # Rust hacking
+#
+# end of Rust hacking
+# end of Kernel hacking
+
 #
 # ======== FRDMX WRT MOD =========
 
