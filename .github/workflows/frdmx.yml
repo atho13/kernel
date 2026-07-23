@@ -21,13 +21,13 @@ on:
       kernel_version:
         description: "Select kernel version"
         required: false
-        default: "6.17.y"
+        default: "amlogic-6.17.y"
         type: choice
         options:
           - 5.4.y
           - 5.10.y
           - 5.15.y
-          - 6.17.y
+          - amlogic-6.17.y
       kernel_auto:
         description: "Auto use the latest kernel"
         required: false
