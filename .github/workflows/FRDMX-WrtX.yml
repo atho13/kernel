@@ -290,7 +290,7 @@ jobs:
           ls -la kernel-config/release/
 
       - name: Compile the kernel [ ${{ matrix.kernel_version }} ]
-        uses: ophub/amlogic-s9xxx-armbian@main
+        uses: atho13/amlogic-s9xxx-armbian@main
         if: ${{ steps.disk.outputs.status == 'success' && !cancelled() }}
         with:
           build_target: kernel
