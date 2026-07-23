@@ -17,16 +17,17 @@ on:
           - unifreq
           - ophub
           - atho13
+          - tes-rep/linuxx
       kernel_version:
         description: "Select kernel version"
         required: false
-        default: "6.14.y"
+        default: "6.17.y"
         type: choice
         options:
           - 5.4.y
           - 5.10.y
           - 5.15.y
-          - 6.14.y
+          - 6.17.y
       kernel_auto:
         description: "Auto use the latest kernel"
         required: false
