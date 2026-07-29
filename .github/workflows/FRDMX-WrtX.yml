@@ -202,7 +202,6 @@ jobs:
           cat <<EOT > "$TARGET_CONFIG"
              CONFIG_WATCHDOG=y
              CONFIG_WATCHDOG_CORE=y
-             CONFIG_MESON_WATCHDOG=y
              # CONFIG_WATCHDOG_NOWAYOUT is not set
              CONFIG_PANIC_ON_OOPS=y
              CONFIG_PANIC_TIMEOUT=5
@@ -212,13 +211,6 @@ jobs:
              CONFIG_NETFILTER_NETLINK=y
              CONFIG_NETFILTER_XT_MATCH_CONNTRACK=y
              CONFIG_NETFILTER_XT_MATCH_STATE=y
-             CONFIG_ARCH_MESON=y
-             CONFIG_COMMON_CLK_G12A=y
-             CONFIG_RESET_CONTROLLER=y
-             CONFIG_RESET_MESON=y
-             CONFIG_USB_DWC3=y
-             CONFIG_USB_DWC3_DUAL_ROLE=y
-             CONFIG_USB_DWC3_GENERIC_PLAT=y
              CONFIG_USB_SERIAL=y
              CONFIG_USB_SERIAL_WWAN=y
              CONFIG_USB_SERIAL_OPTION=y
