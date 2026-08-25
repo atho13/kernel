@@ -280,7 +280,6 @@ jobs:
           echo "==> Berhasil membuat berkas config kustom FRDMX!"
           cat "$TARGET_CONFIG"
           ls -la kernel-config/release/
-          fi
           echo "==> Sistem siap melakukan kompilasi bersih!"
 
 
