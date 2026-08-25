@@ -13,15 +13,16 @@ on:
       kernel_source:
         description: "Select the kernel source"
         required: false
-        default: "ophub"
+        default: "atho13"
         type: choice
         options:
           - unifreq
           - ophub
+          - atho13
       kernel_version:
         description: "Select kernel version"
         required: false
-        default: "6.18.y"
+        default: "6.6.y"
         type: choice
         options:
           - all
@@ -69,7 +70,7 @@ on:
       docker_image:
         description: "Select Armbian docker image"
         required: false
-        default: "resolute"
+        default: "noble"
         type: choice
         options:
           - trixie
@@ -83,16 +84,7 @@ on:
         type: choice
         options:
           - -ophub
-          - -happy-new-year
-          - -dragon-boat-festival
-          - -mid-autumn-festival
-          - -happy-national-day
-          - -merry-christmas
-          - -spring-plowing
-          - -summer-growing
-          - -autumn-harvesting
-          - -winter-storing
-          - -yourname
+          - -FRDMX
       kernel_config:
         description: "Set the path of kernel .config"
         required: false
