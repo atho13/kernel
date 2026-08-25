@@ -75,7 +75,7 @@ on:
       kernel_sign:
         description: "Set the kernel custom signature"
         required: false
-        default: "-ophub"
+        default: "-FRDMX"
         type: choice
         options:
           - -ophub
@@ -201,88 +201,7 @@ jobs:
           TARGET_CONFIG="kernel-config/release/config-${KERNEL_MAJOR}"
           
           echo "==> Membuat file konfigurasi otomatis untuk Kernel ${{ matrix.kernel_version }} -> ${TARGET_CONFIG}"
-          
-          cat <<EOT > "$TARGET_CONFIG"
-             CONFIG_WATCHDOG=y
-             CONFIG_WATCHDOG_CORE=y
-             # CONFIG_WATCHDOG_NOWAYOUT is not set
-             CONFIG_PANIC_ON_OOPS=y
-             CONFIG_PANIC_TIMEOUT=5
-             CONFIG_NETFILTER=y
-             CONFIG_NET_CORE=y
-             CONFIG_NF_CONNTRACK=y
-             CONFIG_NETFILTER_NETLINK=y
-             CONFIG_NETFILTER_XT_MATCH_CONNTRACK=y
-             CONFIG_NETFILTER_XT_MATCH_STATE=y
-             CONFIG_USB_SERIAL=y
-             CONFIG_USB_SERIAL_WWAN=y
-             CONFIG_USB_SERIAL_OPTION=y
-             CONFIG_USB_NET_DRIVERS=y
-             CONFIG_USB_USBNET=y
-             CONFIG_USB_NET_CDCETHER=y
-             CONFIG_USB_NET_CDC_NCM=y
-             CONFIG_USB_NET_HUAWEI_CDC_NCM=y
-             CONFIG_USB_NET_CDC_MBIM=y
-             CONFIG_USB_NET_RNDIS_HOST=y
-             CONFIG_USB_NET_QMI_WWAN=y
-             CONFIG_USB_NET_CDC_SUBSET=y
-             CONFIG_USB_NET_ZAURUS=y
-             CONFIG_USB_NET_NET1080=y
-             CONFIG_USB_NET_PLUSB=y
-             CONFIG_USB_NET_QMI_WWAN_SIM=y
-             CONFIG_USB_SERIAL_FTDI_SIO=y
-             CONFIG_USB_SERIAL_PL2303=y
-             CONFIG_USB_SERIAL_CH341=y
-             CONFIG_TCP_CONG_ADVANCED=y
-             CONFIG_TCP_CONG_BBR=y
-             CONFIG_DEFAULT_TCP_CONG="bbr"
-             CONFIG_NETFILTER_XT_TARGET_TPROXY=y
-             CONFIG_NETFILTER_XT_MATCH_SOCKET=y
-             CONFIG_CRYPTO_AES_ARM64_CE_BLK=y
-             CONFIG_CRYPTO_CHACHA20_NEON=y
-             CONFIG_CRYPTO_POLY1305_ARM64=y
-             CONFIG_CRYPTO_CHACHA20POLY1305=y
-             CONFIG_CRYPTO_SHA1_ARM64_CE=y
-             CONFIG_CRYPTO_SHA2_ARM64_CE=y
-             CONFIG_CRYPTO_SHA512_ARM64_CE=y
-             CONFIG_PREEMPT_VOLUNTARY=y
-             CONFIG_SCHED_MC=y
-             CONFIG_HZ_100=y
-             # CONFIG_HZ_250 is not set
-             # CONFIG_HZ_1000 is not set
-             CONFIG_NET_SCH_FQ=y
-             CONFIG_NET_SCH_FQ_CODEL=y
-             CONFIG_NET_CLS_ACT=y
-             CONFIG_NET_ACT_POLICE=y
-             CONFIG_SLUB=y
-             # CONFIG_SLAB is not set
-             CONFIG_ZRAM=y
-             CONFIG_ZRAM_DEF_COMP_LZ4=y
-             CONFIG_ZSMALLOC=y
-             CONFIG_NET_FLOW_LIMIT=y
-             CONFIG_RPS=y
-             CONFIG_XPS=y
-             # CONFIG_SOUND is not set
-             # CONFIG_SND is not set
-             # CONFIG_SND_SOC is not set
-             # CONFIG_MEDIA_SUPPORT is not set
-             # CONFIG_VIDEO_DEV is not set
-             # CONFIG_DRM is not set
-             # CONFIG_DRM_MESON is not set
-             # CONFIG_KALLSYMS_ALL is not set
-             # CONFIG_DEBUG_KERNEL is not set
-             # CONFIG_PROFILING is not set
-             # CONFIG_SCHED_DEBUG is not set
-             # CONFIG_SLUB_DEBUG is not set
-          EOT
-
-          sed -i 's/^[ \t]*//' "$TARGET_CONFIG"
-          echo "==> Berhasil membuat berkas config kustom FRDMX!"
-          cat "$TARGET_CONFIG"
-          ls -la kernel-config/release/
-          echo "==> Sistem siap melakukan kompilasi bersih!"
-
-
+        
       - name: Compile the kernel [ ${{ matrix.kernel_version }} ]
         uses: ophub/amlogic-s9xxx-armbian@main
         if: ${{ steps.disk.outputs.status == 'success' && !cancelled() }}
