@@ -4,7 +4,8 @@
 # Copyright (C) 2021 https://github.com/ophub/kernel
 #==========================================================================
 
-name: Frdmx-Mod
+name: Frdmx stable kernel
+
 on:
   repository_dispatch:
   workflow_dispatch:
@@ -12,16 +13,15 @@ on:
       kernel_source:
         description: "Select the kernel source"
         required: false
-        default: "atho13"
+        default: "ophub"
         type: choice
         options:
           - unifreq
           - ophub
-          - atho13
       kernel_version:
         description: "Select kernel version"
         required: false
-        default: "6.6.y"
+        default: "6.18.y"
         type: choice
         options:
           - all
@@ -69,7 +69,7 @@ on:
       docker_image:
         description: "Select Armbian docker image"
         required: false
-        default: "noble"
+        default: "resolute"
         type: choice
         options:
           - trixie
@@ -83,7 +83,16 @@ on:
         type: choice
         options:
           - -ophub
-          - -FRDMX
+          - -happy-new-year
+          - -dragon-boat-festival
+          - -mid-autumn-festival
+          - -happy-national-day
+          - -merry-christmas
+          - -spring-plowing
+          - -summer-growing
+          - -autumn-harvesting
+          - -winter-storing
+          - -yourname
       kernel_config:
         description: "Set the path of kernel .config"
         required: false
@@ -112,34 +121,12 @@ jobs:
           fi
           echo "matrix=${MATRIX}" >> "${GITHUB_OUTPUT}"
 
-jobs:
-  setup:
-    runs-on: ubuntu-26.04-arm
-    outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
-    steps:
-      - name: Set build matrix based on kernel_version input
-        id: set-matrix
-        run: |
-          if [[ "${{ inputs.kernel_version }}" == "all" ]]; then
-            MATRIX='{"include":[{"kernel_version":"5.10.y"},{"kernel_version":"5.15.y"},{"kernel_version":"6.1.y"},{"kernel_version":"6.6.y"},{"kernel_version":"6.12.y"},{"kernel_version":"6.18.y"}]}'
-          else
-            MATRIX='{"include":[{"kernel_version":"${{ inputs.kernel_version }}"}]}'
-          fi
-          echo "matrix=${MATRIX}" >> "${GITHUB_OUTPUT}"
-
   build:
     needs: setup
     runs-on: ubuntu-26.04-arm
     if: ${{ github.event.repository.owner.id == github.event.sender.id }}
     permissions:
       contents: write
-
-    strategy:
-      fail-fast: false
-      matrix: ${{ fromJSON(needs.setup.outputs.matrix) }}
-
-    name: compile-kernel-${{ matrix.kernel_version }}
 
     strategy:
       fail-fast: false
@@ -250,3 +237,4 @@ jobs:
           body: |
             - These are Mainline `stable` kernels that provide support for `Armbian`, `OpenWrt` and `FnNAS`.
             - It works with most `Amlogic`, `Rockchip`, and `Allwinner` devices. For specific details, please refer to the instructions on the homepage of each system's repository.
+            
