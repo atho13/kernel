@@ -105,7 +105,23 @@ jobs:
       - name: Set build matrix based on kernel_version input
         id: set-matrix
         run: |
-        if [[ "${{ inputs.kernel_version }}" == "all" ]]; then
+          if [[ "${{ inputs.kernel_version }}" == "all" ]]; then
+            MATRIX='{"include":[{"kernel_version":"5.10.y"},{"kernel_version":"5.15.y"},{"kernel_version":"6.1.y"},{"kernel_version":"6.6.y"},{"kernel_version":"6.12.y"},{"kernel_version":"6.18.y"}]}'
+          else
+            MATRIX='{"include":[{"kernel_version":"${{ inputs.kernel_version }}"}]}'
+          fi
+          echo "matrix=${MATRIX}" >> "${GITHUB_OUTPUT}"
+
+jobs:
+  setup:
+    runs-on: ubuntu-26.04-arm
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Set build matrix based on kernel_version input
+        id: set-matrix
+        run: |
+          if [[ "${{ inputs.kernel_version }}" == "all" ]]; then
             MATRIX='{"include":[{"kernel_version":"5.10.y"},{"kernel_version":"5.15.y"},{"kernel_version":"6.1.y"},{"kernel_version":"6.6.y"},{"kernel_version":"6.12.y"},{"kernel_version":"6.18.y"}]}'
           else
             MATRIX='{"include":[{"kernel_version":"${{ inputs.kernel_version }}"}]}'
@@ -118,6 +134,12 @@ jobs:
     if: ${{ github.event.repository.owner.id == github.event.sender.id }}
     permissions:
       contents: write
+
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.setup.outputs.matrix) }}
+
+    name: compile-kernel-${{ matrix.kernel_version }}
 
     strategy:
       fail-fast: false
