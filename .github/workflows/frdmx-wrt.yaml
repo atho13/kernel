@@ -192,15 +192,6 @@ jobs:
           key: kernel-stable-${{ inputs.kernel_toolchain }}-${{ matrix.kernel_version }}-${{ env.source_hash }}
           restore-keys: |
             kernel-stable-${{ inputs.kernel_toolchain }}-${{ matrix.kernel_version }}-
-
-      - name: Frdmx kernel
-        run: |
-          mkdir -p kernel-config/release
-          
-          KERNEL_MAJOR=$(echo "${{ matrix.kernel_version }}" | cut -d. -f1-2)
-          TARGET_CONFIG="kernel-config/release/config-${KERNEL_MAJOR}"
-          
-          echo "==> Membuat file konfigurasi otomatis untuk Kernel ${{ matrix.kernel_version }} -> ${TARGET_CONFIG}"
         
       - name: Compile the kernel [ ${{ matrix.kernel_version }} ]
         uses: ophub/amlogic-s9xxx-armbian@main
