@@ -106,7 +106,6 @@ jobs:
   build:
     needs: setup
     runs-on: ubuntu-26.04-arm
-    if: \${{ github.event.repository.owner.id == github.event.sender.id }}
     permissions:
       contents: write
 
@@ -166,7 +165,6 @@ jobs:
       - name: Get kernel source commit hash
         id: kernelhash
         run: |
-          # Perbaikan API URL: Disesuaikan agar mendeteksi hash commit langsung dari branch main repositori kustom Anda
           api_url="https://github.com\${{ inputs.kernel_source }}/git/ref/heads/main"
           source_hash=\$(curl -fsSL -m 20 \
               -H "Accept: application/vnd.github+json" \
