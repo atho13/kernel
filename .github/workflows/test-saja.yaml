@@ -210,7 +210,7 @@ jobs:
         uses: ophub/upload-to-releases@main
         if: ${{ env.PACKAGED_STATUS == 'success' && !cancelled() }}
         with:
-          tag: kernel_stable
+          tag: kernel_beta
           artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
           allow_updates: true
           remove_artifacts: false
