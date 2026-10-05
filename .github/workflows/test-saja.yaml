@@ -11,7 +11,7 @@ on:
         type: choice
         options:
           - unifreq
-          - ophub
+          - atho13/h6-6.6.y
           - atho13/h6-6.14.y
       kernel_version:
         description: "Select kernel version"
