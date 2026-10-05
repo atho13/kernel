@@ -8,12 +8,12 @@ on:
       kernel_source:
         description: "Select the kernel source"
         required: false
-        default: "atho13/opz3"
+        default: "atho13/h6-6.14.y"
         type: choice
         options:
           - unifreq
           - ophub
-          - atho13/opz3
+          - atho13/h6-6.14.y
       kernel_version:
         description: "Select kernel version"
         required: false
@@ -79,10 +79,10 @@ on:
       kernel_config:
         description: "Set the path of kernel .config"
         required: false
-        default: "kernel-config/release/opiz"
+        default: "kernel-config/release/h6"
         type: choice
         options:
-          - kernel-config/release/opiz
+          - kernel-config/release/h6
           - false
 
 env:
