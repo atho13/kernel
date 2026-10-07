@@ -1,6 +1,6 @@
 --- a/drivers/net/wireless/uwe5622/unisocwcn/platform/wcn_boot.c
 +++ b/drivers/net/wireless/uwe5622/unisocwcn/platform/wcn_boot.c
-@@ -3862,11 +3862,12 @@
+@@ -3860,12 +3860,13 @@
  }
  #endif
  
