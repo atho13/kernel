@@ -214,12 +214,12 @@ jobs:
 
       - name: Upload Kernel to Release
         uses: ophub/upload-to-releases@main
-        if: ${{ !cancelled() }} # <-- Sudah Bersih tanpa \
+        if: ${{ !cancelled() }}
         with:
           tag: kernel_h6
-          artifacts: /builder/output/*
+          artifacts: /builder/compile-kernel/output/*
           allow_updates: true
           remove_artifacts: false
           replaces_artifacts: true
           make_latest: true
-          gh_token: ${{ secrets.GITHUB_TOKEN }} # <-- Sudah Bersih tanpa \
+          gh_token: ${{ secrets.GITHUB_TOKEN }}
