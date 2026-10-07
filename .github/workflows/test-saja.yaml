@@ -85,10 +85,10 @@ on:
       kernel_patch:
         description: "Set the patch of kernel"
         required: false
-        default: "kernel/kernel-patch/sunxi-6.6"
+        default: "kernel-patch/sunxi-6.6"
         type: choice
         options:
-          - kernel/kernel-patch/sunxi-6.6
+          - kernel-patch/sunxi-6.6
           - false
 
 env:
