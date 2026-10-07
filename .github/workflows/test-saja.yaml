@@ -82,6 +82,14 @@ on:
         options:
           - kernel-config/release/h6
           - false
+      kernel_patch:
+        description: "Set the patch of kernel"
+        required: false
+        default: "kernel-patch/sunxi-6.6"
+        type: choice
+        options:
+          - kernel-patch/sunxi-6.6
+          - false
 
 env:
   TZ: Etc/UTC
