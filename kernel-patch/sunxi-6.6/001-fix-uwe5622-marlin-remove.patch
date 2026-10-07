@@ -1,0 +1,16 @@
+--- a/drivers/net/wireless/uwe5622/unisocwcn/platform/wcn_boot.c
++++ b/drivers/net/wireless/uwe5622/unisocwcn/platform/wcn_boot.c
+@@ -3862,11 +3862,12 @@
+ }
+ #endif
+ 
+-static void marlin_remove(struct platform_device *pdev)
++static int marlin_remove(struct platform_device *pdev)
+ {
+ 	wcn_print("%s entry!\n", __func__);
+ 	marlin_exit();
+ 	wcn_print("%s ok!\n", __func__);
++	return 0;
+ }
+ 
+ static const struct of_device_id marlin_dt_match[] = {
