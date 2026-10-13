@@ -10064,7 +10064,7 @@ CONFIG_PANIC_TIMEOUT=5
 CONFIG_IKCONFIG=y
 CONFIG_IKCONFIG_PROC=y
 
-# Core Virtualization & Containerization (Wajib untuk Docker & OpenWrt Container)
+# Core Virtualization & Containerization
 CONFIG_NAMESPACES=y
 CONFIG_UTS_NS=y
 CONFIG_IPC_NS=y
@@ -10082,7 +10082,7 @@ CONFIG_BLK_CGROUP=y
 CONFIG_MEMCG=y
 CONFIG_MEMCG_SWAP=y
 
-# Advanced Network & Firewall Core (Netfilter/NFTables untuk OpenWrt Routing)
+# Advanced Network & Firewall
 CONFIG_NETFILTER=y
 CONFIG_NET_CORE=y
 CONFIG_NF_CONNTRACK=y
@@ -10103,14 +10103,14 @@ CONFIG_BRIDGE=y
 CONFIG_BRIDGE_NETFILTER=m
 CONFIG_VLAN_8021Q=y
 
-# Driver WiFi Bawaan Onboard (Unisoc UWE5622 Orange Pi Zero 3)
+# Driver for Unisoc
 CONFIG_SPARD_WLAN_SUPPORT=y
 CONFIG_UWE5622=m
 CONFIG_UNISOC_WCNCORE=m
 CONFIG_UNISOC_WIFI=m
 CONFIG_TTY_SDIO=m
 
-# USB Serial & Modem Drivers (Untuk Modem 4G/LTE / USB To TTL)
+# USB Serial & Modem Drivers
 CONFIG_USB_SERIAL=m
 CONFIG_USB_SERIAL_WWAN=m
 CONFIG_USB_SERIAL_OPTION=m
@@ -10118,7 +10118,7 @@ CONFIG_USB_SERIAL_FTDI_SIO=m
 CONFIG_USB_SERIAL_PL2303=m
 CONFIG_USB_SERIAL_CH341=m
 
-# USB Network Tethering Drivers (Bisa Dibaca OpenWrt & Armbian)
+# USB & Modem Drivers
 CONFIG_USB_NET_DRIVERS=m
 CONFIG_USB_USBNET=m
 CONFIG_USB_NET_CDCETHER=m
@@ -10131,7 +10131,7 @@ CONFIG_USB_NET_QMI_WWAN_SIM=m
 CONFIG_USB_CATC=m
 CONFIG_USB_NET_ZAURUS=m
 
-# Driver USB LAN / Ethernet Dongle Eksternal
+# USB LAN Driver
 CONFIG_USB_RTL8152=m
 CONFIG_USB_RTL8153=m
 CONFIG_USB_NET_AX8817X=m
@@ -10140,14 +10140,14 @@ CONFIG_USB_NET_NET1080=m
 CONFIG_USB_NET_DM9601=m
 CONFIG_USB_NET_MCS7830=m
 
-# Bus Hardware & Layer Fisik SoC H618 (Wajib Ke Kernel Inti)
+# Bus Hardware & Layer
 CONFIG_PCI=y
 CONFIG_PCI_DOMAINS=y
 CONFIG_PCI_DOMAINS_GENERIC=y
 CONFIG_PCI_HOST_GENERIC=y
 CONFIG_PHY_SUN50I_USB3=y
 
-# Akselerasi Jaringan & Manajemen Bandwidth (BBR / SQM OpenWrt)
+# Network Acceleration
 CONFIG_TCP_CONG_ADVANCED=y
 CONFIG_TCP_CONG_BBR=y
 CONFIG_DEFAULT_TCP_CONG="bbr"
@@ -10160,7 +10160,7 @@ CONFIG_NET_SCH_CAKE=y
 CONFIG_NET_CLS_ACT=y
 CONFIG_NET_ACT_POLICE=y
 
-# Akselerasi Enkripsi Perangkat Keras ARM64 (Sangat Cepat untuk VPN)
+# Enkripsi Acceleration
 CONFIG_CRYPTO_AES_ARM64_CE_BLK=y
 CONFIG_CRYPTO_CHACHA20_NEON=y
 CONFIG_CRYPTO_POLY1305_ARM64=y
@@ -10169,7 +10169,7 @@ CONFIG_CRYPTO_SHA1_ARM64_CE=y
 CONFIG_CRYPTO_SHA2_ARM64_CE=y
 CONFIG_CRYPTO_SHA512_ARM64_CE=y
 
-# Manajemen Memori Ringan (ZRAM untuk Swap RAM Kecil OPI Z3)
+# Memory Management
 CONFIG_PREEMPT_VOLUNTARY=y
 CONFIG_SCHED_MC=y
 CONFIG_HZ_100=y
@@ -10183,14 +10183,14 @@ CONFIG_ZSMALLOC=y
 CONFIG_CRYPTO_LZ4=y
 CONFIG_LZ4_COMPRESS=y
 
-# Headless Settings (Menonaktifkan Fungsi Layar/Audio Agar Hemat RAM)
+# Headless Settings
 # CONFIG_SOUND is not set
 # CONFIG_SND is not set
 # CONFIG_MEDIA_SUPPORT is not set
 # CONFIG_VIDEO_DEV is not set
 # CONFIG_DRM is not set
 
-# Debugging Mati (Mencegah Lag & Lolos Error BTF GitHub Actions)
+# Dead of Debugging
 # CONFIG_KALLSYMS_ALL is not set
 # CONFIG_DEBUG_KERNEL is not set
 # CONFIG_PROFILING is not set
