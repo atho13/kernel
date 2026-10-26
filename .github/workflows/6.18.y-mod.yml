@@ -1,5 +1,5 @@
 
-name: rtl8189fs to kernel 6.18.7y
+name: rtl8189fs to kernel 6.18.y
 
 on:
   repository_dispatch:
