@@ -88,16 +88,7 @@ on:
         options:
           - kernel-config/release/stable
           - false
-      kernel_patch:
-        description: "Set the patch of kernel"
-        required: false
-        default: "false"
-        type: choice
-        options:
-          - kernel-patch/beta/linux-6.18.y
-          - kernel-patch/beta
-          - false
-
+          
 env:
   TZ: Etc/UTC
 
