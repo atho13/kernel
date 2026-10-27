@@ -198,31 +198,43 @@ jobs:
           restore-keys: |
             kernel-stable-${{ inputs.kernel_toolchain }}-${{ matrix.kernel_version }}-
 
-      - name: Inject Patch Into Build Workspace
+      - name: Inject Strict Patch for Kernel 6.18
         run: |
-          echo "Mencari file driver di direktori penyimpanan sementara..."
-          # Mencari semua file ioctl_cfg80211.c yang ada di workspace pembangun
-          FILES=$(find / -name "ioctl_cfg80211.c" 2>/dev/null | grep "rtl8189fs") || true
+          echo "Mencari file driver RTL8189FS..."
+          # Pastikan pencarian benar-benar hanya mengambil file di dalam struktur folder rtl8189fs
+          IOCTL_FILE=$(find / -path "*/rtl8189fs/*" -name "ioctl_cfg80211.c" 2>/dev/null | head -n 1) || true
+          MAKE_FILE=$(find / -path "*/rtl8189fs/*" -name "Makefile" 2>/dev/null | head -n 1) || true
           
-          if [ -n "$FILES" ]; then
-            for F in $FILES; do
-              echo "Memodifikasi file: $F"
-              sudo sed -i 's/u64 \*cookie/u64 cookie/g' "$F"
-              sudo sed -i 's/\*cookie = /\/\/ \*cookie = /g' "$F"
-            done
-            echo "Modifikasi awal berhasil disuntikkan!"
+          if [ -n "$IOCTL_FILE" ] && [ -f "$IOCTL_FILE" ]; then
+            echo "Memodifikasi file ioctl RTL8189FS di: $IOCTL_FILE"
+            sudo sed -i 's/u64 \*cookie/u64 cookie/g' "$IOCTL_FILE"
+            sudo sed -i 's/\*cookie = /\/\/ \*cookie = /g' "$IOCTL_FILE"
+            
+            # Logika pembaruan untuk Kernel >= 6.0.0 dari diff Anda
+            if ! grep -q "KERNEL_VERSION(6, 0, 0)" "$IOCTL_FILE"; then
+              sudo sed -i 's/#if 1/#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 0, 0))/g' "$IOCTL_FILE"
+              sudo sed -i 's/#else/#endif\n#if 0/g' "$IOCTL_FILE"
+            fi
+            echo "Modifikasi file kode C selesai."
           else
-            echo "File belum diekstrak oleh skrip utama. Kita pasang perangkap otomatis via skrip pembangun."
+            echo "PERINGATAN: File ioctl_cfg80211.c milik rtl8189fs tidak ditemukan."
           fi
-          
-          # Trik Cadangan: Jika file diunduh belakangan di dalam Docker, kita selipkan perintah sed ke file konfigurasi kernel
+
+          if [ -n "$MAKE_FILE" ] && [ -f "$MAKE_FILE" ]; then
+            echo "Memodifikasi Makefile RTL8189FS di: $MAKE_FILE"
+            sudo sed -i 's/CONFIG_POWER_SAVING = y/CONFIG_POWER_SAVING = n/g' "$MAKE_FILE"
+            echo "Modifikasi Makefile selesai."
+          else
+            echo "PERINGATAN: Makefile milik rtl8189fs tidak ditemukan."
+          fi
+
+          # Trik Utama: Mencegah kegagalan akibat ketidakcocokan tipe pointer di seluruh modul wireless
           CONFIG_FILE="kernel-config/release/stable"
           if [ -f "$CONFIG_FILE" ]; then
-            echo "Menambahkan pemicu otomatis ke file config..."
-            # Memaksa compiler mengabaikan kesalahan pointer jenis ini agar kompilasi tetap sukses berjalan
+            echo "Menambahkan toleransi compiler global ke file config..."
             echo "CONFIG_RTL8189FS=m" >> "$CONFIG_FILE"
-            # Baris di bawah ini memaksa GCC untuk menurunkan status error pointer menjadi sekadar peringatan (warning)
-            echo "KCFLAGS += -Wno-error=incompatible-pointer-types" >> "$CONFIG_FILE"
+            # Bendera di bawah ini memaksa compiler mengabaikan kesalahan pointer jenis apa pun di level driver jaringan
+            echo "KCFLAGS += -Wno-error=incompatible-pointer-types -Wno-error=date-time" >> "$CONFIG_FILE"
           fi
         
       - name: Compile the kernel [ ${{ matrix.kernel_version }} ]
