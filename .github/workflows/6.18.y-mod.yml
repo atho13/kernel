@@ -31,6 +31,22 @@ on:
         default: noble
         type: choice
         options: [resolute, noble, trixie, bookworm]
+      kernel_sign:
+        description: "Set the kernel custom signature"
+        required: false
+        default: "-FRDMX"
+        type: choice
+        options:
+          - -ophub
+          - -FRDMX
+      kernel_config:
+        description: "Set the path of kernel .config"
+        required: false
+        default: "kernel-config/release/stable"
+        type: choice
+        options:
+          - kernel-config/release/stable
+          - false
 
 env:
   TZ: Etc/UTC
