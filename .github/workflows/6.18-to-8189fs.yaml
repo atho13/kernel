@@ -219,7 +219,7 @@ jobs:
         if: ${{ env.PACKAGED_STATUS == 'success' }}
         uses: actions/upload-artifact@v4
         with:
-          name: kernel-6.18-FRDMXX
+          name: kernel-6.18-FRDMX
           path: |
             ${{ env.PACKAGED_OUTPUTPATH }}/*
             rtl8189fs-module.tar.gz
