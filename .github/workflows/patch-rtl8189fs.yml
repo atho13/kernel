@@ -1,0 +1,55 @@
+name: Auto Patch RTL8189FS 6.18
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Patch RTL8189FS for Linux 6.18
+        run: |
+          cd drivers/net/wireless/realtek/rtl8189fs
+
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path("os_dep/linux/ioctl_cfg80211.c")
+          s = p.read_text()
+
+          for ver in ["7, 1, 0", "7, 2, 0", "7, 3, 0"]:
+              old = f"#if (LINUX_VERSION_CODE >= KERNEL_VERSION({ver}))"
+              new = "#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 0))"
+              s = s.replace(old, new)
+
+          old = "static s32 cfg80211_rtw_remain_on_channel"
+          new = "static int cfg80211_rtw_remain_on_channel"
+          if s.count(old) != 1:
+              raise SystemExit("ERROR: cfg80211_rtw_remain_on_channel not found or multiple")
+          s = s.replace(old, new, 1)
+
+          p.write_text(s)
+          print("=== Patch complete ===")
+          PY
+
+          cd ../../../../..
+          if ! grep -q "rtl8189fs" drivers/net/wireless/realtek/Kconfig; then
+            sed -i '/rtl8192eu/a source "drivers/net/wireless/realtek/rtl8189fs/Kconfig"' drivers/net/wireless/realtek/Kconfig
+          fi
+          if ! grep -q "CONFIG_RTL8189FS" drivers/net/wireless/realtek/Makefile; then
+            echo 'obj-$(CONFIG_RTL8189FS) += rtl8189fs/' >> drivers/net/wireless/realtek/Makefile
+          fi
+
+      - name: Commit & Push Changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@://github.com"
+          git add .
+          git diff --cached --quiet || git commit -m "Patch rtl8189fs for Linux 6.18"
+          git push
