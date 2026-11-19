@@ -219,8 +219,10 @@ jobs:
         if: ${{ env.PACKAGED_STATUS == 'success' }}
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.KERNEL_VER }}
-          path: ${{ env.PACKAGED_OUTPUTPATH }}/*
+          name: kernel-6.18-FRDMXX
+          path: |
+            ${{ env.PACKAGED_OUTPUTPATH }}/*
+            rtl8189fs-module.tar.gz
           if-no-files-found: error
 
       - name: Upload to kernel_stable release
