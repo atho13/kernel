@@ -1,5 +1,5 @@
 
-name: Mod-6.18.y-rtl8189fs
+name: Mod-6.18.y
 
 on:
   repository_dispatch:
